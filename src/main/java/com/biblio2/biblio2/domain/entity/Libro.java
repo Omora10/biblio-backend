@@ -2,8 +2,6 @@ package com.biblio2.biblio2.domain.entity;
 
 /**
  * Entidad de dominio: Libro
- * Representa un libro en el sistema sin dependencias de Spring ni infraestructura.
- * Esta clase es agnóstica a la persistencia y transporte.
  */
 public class Libro {
 
@@ -11,34 +9,27 @@ public class Libro {
     private String titulo;
     private String autor;
     private String isbn;
+    private String imagenUrl;
     private boolean prestado = false;
 
-    /**
-     * Constructor sin argumentos para frameworks de serialización
-     */
     public Libro() {
     }
 
-    /**
-     * Constructor con argumentos
-     */
-    public Libro(Long id, String titulo, String autor, String isbn) {
+    public Libro(Long id, String titulo, String autor, String isbn, String imagenUrl) {
         this.id = id;
         this.titulo = titulo;
         this.autor = autor;
         this.isbn = isbn;
+        this.imagenUrl = imagenUrl;
     }
 
-    /**
-     * Constructor para crear libro sin ID (nuevo libro)
-     */
-    public Libro(String titulo, String autor, String isbn) {
+    public Libro(String titulo, String autor, String isbn, String imagenUrl) {
         this.titulo = titulo;
         this.autor = autor;
         this.isbn = isbn;
+        this.imagenUrl = imagenUrl;
     }
 
-    // Getters
     public Long getId() {
         return id;
     }
@@ -55,7 +46,14 @@ public class Libro {
         return isbn;
     }
 
-    // Setters
+    public String getImagenUrl() {
+        return imagenUrl;
+    }
+
+    public boolean isPrestado() {
+        return prestado;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -72,8 +70,8 @@ public class Libro {
         this.isbn = isbn;
     }
 
-    public boolean isPrestado() {
-        return prestado;
+    public void setImagenUrl(String imagenUrl) {
+        this.imagenUrl = imagenUrl;
     }
 
     public void setPrestado(boolean prestado) {
@@ -87,8 +85,8 @@ public class Libro {
                 ", titulo='" + titulo + '\'' +
                 ", autor='" + autor + '\'' +
                 ", isbn='" + isbn + '\'' +
+                ", imagenUrl='" + imagenUrl + '\'' +
                 ", prestado=" + prestado +
                 '}';
     }
 }
-

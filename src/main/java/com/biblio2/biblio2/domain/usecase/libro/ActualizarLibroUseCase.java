@@ -3,6 +3,12 @@ package com.biblio2.biblio2.domain.usecase.libro;
 import com.biblio2.biblio2.domain.entity.Libro;
 
 public interface ActualizarLibroUseCase {
-    Libro ejecutar(Long id, String titulo, String autor, String isbn);
-}
 
+    Libro ejecutar(
+            Long id,
+            String titulo,
+            String autor,
+            String isbn,
+            String imagenUrl
+    );
+}
