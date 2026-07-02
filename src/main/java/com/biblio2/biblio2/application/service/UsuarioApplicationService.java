@@ -7,6 +7,7 @@ import com.biblio2.biblio2.domain.usecase.usuario.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -24,9 +25,6 @@ public class UsuarioApplicationService implements
     private final UsuarioRepositoryPort usuarioRepository;
     private final PasswordEncoder passwordEncoder;
 
-    /**
-     * Constructor con inyección de dependencias
-     */
     public UsuarioApplicationService(UsuarioRepositoryPort usuarioRepository,
                                      PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
@@ -34,11 +32,24 @@ public class UsuarioApplicationService implements
     }
 
     /**
-     * Registra un nuevo usuario en el sistema
+     * Registra un nuevo usuario en el sistema.
+     * Se asignan valores por defecto para los nuevos campos
+     * manteniendo compatibilidad con el frontend actual.
      */
     public Usuario registrarUsuario(String nombre, String email, String password) {
+
         String encodedPassword = passwordEncoder.encode(password);
-        Usuario nuevoUsuario = new Usuario(nombre, email, encodedPassword);
+
+        Usuario nuevoUsuario = new Usuario(
+                nombre,
+                email,
+                encodedPassword,
+                null,                  // telefono
+                null,                  // avatarUrl
+                true,                  // activo
+                LocalDate.now()        // fechaRegistro
+        );
+
         return usuarioRepository.guardar(nuevoUsuario);
     }
 
@@ -64,7 +75,8 @@ public class UsuarioApplicationService implements
     public Usuario obtenerUsuarioPorId(Long id) {
         return usuarioRepository.obtenerPorId(id)
                 .orElseThrow(() ->
-                        new UsuarioNoEncontradoException("Usuario con ID " + id + " no encontrado"));
+                        new UsuarioNoEncontradoException(
+                                "Usuario con ID " + id + " no encontrado"));
     }
 
     /**
@@ -76,12 +88,16 @@ public class UsuarioApplicationService implements
     }
 
     /**
-     * Actualiza un usuario existente
+     * Actualiza un usuario existente.
+     * Conserva los nuevos campos si no son modificados.
      */
     public Usuario actualizarUsuario(Long id, String nombre, String email) {
+
         Usuario usuario = obtenerUsuarioPorId(id);
+
         usuario.setNombre(nombre);
         usuario.setEmail(email);
+
         return usuarioRepository.actualizar(usuario);
     }
 
@@ -97,8 +113,10 @@ public class UsuarioApplicationService implements
      * Obtiene un usuario por email
      */
     public Usuario obtenerPorEmail(String email) {
+
         return usuarioRepository.obtenerPorEmail(email)
                 .orElseThrow(() ->
-                        new UsuarioNoEncontradoException("Usuario con email " + email + " no encontrado"));
+                        new UsuarioNoEncontradoException(
+                                "Usuario con email " + email + " no encontrado"));
     }
 }

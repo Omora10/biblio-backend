@@ -22,7 +22,6 @@ public class UsuarioRepositoryAdapter implements UsuarioRepositoryPort {
 
     /**
      * Constructor con inyección de dependencias
-     * @param jpaRepository Repositorio JPA de usuarios
      */
     public UsuarioRepositoryAdapter(UsuarioJpaRepository jpaRepository) {
         this.jpaRepository = jpaRepository;
@@ -43,7 +42,8 @@ public class UsuarioRepositoryAdapter implements UsuarioRepositoryPort {
      */
     @Override
     public Optional<Usuario> obtenerPorId(Long id) {
-        return jpaRepository.findById(id).map(this::mapToDomain);
+        return jpaRepository.findById(id)
+                .map(this::mapToDomain);
     }
 
     /**
@@ -51,7 +51,8 @@ public class UsuarioRepositoryAdapter implements UsuarioRepositoryPort {
      */
     @Override
     public Optional<Usuario> obtenerPorEmail(String email) {
-        return jpaRepository.findByEmail(email).map(this::mapToDomain);
+        return jpaRepository.findByEmail(email)
+                .map(this::mapToDomain);
     }
 
     /**
@@ -93,6 +94,7 @@ public class UsuarioRepositoryAdapter implements UsuarioRepositoryPort {
      * Mapea una entidad de dominio a entidad JPA
      */
     private UsuarioEntity mapToEntity(Usuario usuario) {
+
         UsuarioEntity entity = new UsuarioEntity();
 
         if (usuario.getId() != null) {
@@ -102,6 +104,10 @@ public class UsuarioRepositoryAdapter implements UsuarioRepositoryPort {
         entity.setNombre(usuario.getNombre());
         entity.setEmail(usuario.getEmail());
         entity.setPassword(usuario.getPassword());
+        entity.setTelefono(usuario.getTelefono());
+        entity.setAvatarUrl(usuario.getAvatarUrl());
+        entity.setActivo(usuario.isActivo());
+        entity.setFechaRegistro(usuario.getFechaRegistro());
 
         return entity;
     }
@@ -110,13 +116,17 @@ public class UsuarioRepositoryAdapter implements UsuarioRepositoryPort {
      * Mapea una entidad JPA a entidad de dominio
      */
     private Usuario mapToDomain(UsuarioEntity entity) {
+
         Usuario usuario = new Usuario(
+                entity.getId(),
                 entity.getNombre(),
                 entity.getEmail(),
-                entity.getPassword()
+                entity.getPassword(),
+                entity.getTelefono(),
+                entity.getAvatarUrl(),
+                entity.isActivo(),
+                entity.getFechaRegistro()
         );
-
-        usuario.setId(entity.getId());
 
         return usuario;
     }

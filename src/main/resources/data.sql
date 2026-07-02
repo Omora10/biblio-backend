@@ -10,17 +10,21 @@ INSERT INTO libros (titulo, autor, isbn, imagen_url, prestado) VALUES
                                                                    ('El tunel', 'Ernesto Sabato', '978-8432216428', 'https://m.media-amazon.com/images/I/71d7F8hW7EL.jpg', false),
                                                                    ('Maria', 'Jorge Isaacs', '978-9583000454', 'https://m.media-amazon.com/images/I/61j3g5mXj-L.jpg', false);
 
-INSERT INTO usuarios (nombre, email, password) VALUES
-                                                   ('Administrador', 'admin@biblio.com', '123456'),
-                                                   ('Ana Perez', 'ana@biblio.com', '123456'),
-                                                   ('Carlos Ruiz', 'carlos@biblio.com', '123456'),
-                                                   ('Elena Martinez', 'elena@biblio.com', '123456'),
-                                                   ('Juan Garcia', 'juan@biblio.com', '123456');
+INSERT INTO usuarios
+(nombre, email, password, telefono, avatar_url, activo, fecha_registro)
+VALUES
+    ('Administrador', 'admin@biblio.com', '123456', '3101234567', 'https://i.pravatar.cc/300?img=1', true, DATE '2026-06-20'),
+    ('Ana Perez', 'ana@biblio.com', '123456', '3102345678', 'https://i.pravatar.cc/300?img=2', true, DATE '2026-06-21'),
+    ('Carlos Ruiz', 'carlos@biblio.com', '123456', '3103456789', 'https://i.pravatar.cc/300?img=3', true, DATE '2026-06-22'),
+    ('Elena Martinez', 'elena@biblio.com', '123456', '3104567890', 'https://i.pravatar.cc/300?img=4', true, DATE '2026-06-23'),
+    ('Juan Garcia', 'juan@biblio.com', '123456', '3105678901', 'https://i.pravatar.cc/300?img=5', true, DATE '2026-06-24');
 
-INSERT INTO prestamos (usuario_id, libro_id, fecha_prestamo, fecha_devolucion, devuelto) VALUES
-                                                                                             (2, 1, DATE '2026-06-10', NULL, false),
-                                                                                             (3, 2, DATE '2026-06-11', NULL, false),
-                                                                                             (4, 3, DATE '2026-06-01', DATE '2026-06-12', true);
+INSERT INTO prestamos
+(usuario_id, libro_id, fecha_prestamo, fecha_devolucion, devuelto)
+VALUES
+    (2, 1, DATE '2026-06-10', NULL, false),
+    (3, 2, DATE '2026-06-11', NULL, false),
+    (4, 3, DATE '2026-06-01', DATE '2026-06-12', true);
 
 UPDATE libros
 SET prestado = true

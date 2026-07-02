@@ -107,10 +107,15 @@ public class UsuarioController {
      * Convierte una entidad de dominio Usuario a DTO UsuarioResponse
      */
     private UsuarioResponse toResponse(Usuario usuario) {
+
         return new UsuarioResponse(
                 usuario.getId(),
                 usuario.getNombre(),
-                usuario.getEmail()
+                usuario.getEmail(),
+                usuario.getTelefono(),
+                usuario.getAvatarUrl(),
+                usuario.isActivo(),
+                usuario.getFechaRegistro()
         );
     }
 }
