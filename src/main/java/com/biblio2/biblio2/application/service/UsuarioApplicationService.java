@@ -1,11 +1,13 @@
 package com.biblio2.biblio2.application.service;
 
 import com.biblio2.biblio2.domain.entity.Usuario;
-import com.biblio2.biblio2.domain.port.UsuarioRepositoryPort;
 import com.biblio2.biblio2.domain.exception.UsuarioNoEncontradoException;
+import com.biblio2.biblio2.domain.port.UsuarioRepositoryPort;
 import com.biblio2.biblio2.domain.usecase.usuario.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Servicio de Aplicación: Usuario
@@ -14,19 +16,19 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UsuarioApplicationService implements
-    RegistrarUsuarioUseCase,
-    ObtenerUsuarioPorIdUseCase,
-    ActualizarUsuarioUseCase {
+        RegistrarUsuarioUseCase,
+        ObtenerUsuarioPorIdUseCase,
+        ObtenerUsuariosUseCase,
+        ActualizarUsuarioUseCase {
 
     private final UsuarioRepositoryPort usuarioRepository;
     private final PasswordEncoder passwordEncoder;
 
     /**
      * Constructor con inyección de dependencias
-     * @param usuarioRepository Puerto de persistencia de usuarios
-     * @param passwordEncoder Codificador de contraseñas
      */
-    public UsuarioApplicationService(UsuarioRepositoryPort usuarioRepository, PasswordEncoder passwordEncoder) {
+    public UsuarioApplicationService(UsuarioRepositoryPort usuarioRepository,
+                                     PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -41,7 +43,7 @@ public class UsuarioApplicationService implements
     }
 
     /**
-     * Implementación del caso de uso: RegistrarUsuarioUseCase (interfaz)
+     * Implementación del caso de uso RegistrarUsuarioUseCase
      */
     @Override
     public Usuario ejecutar(String nombre, String email, String password) {
@@ -49,17 +51,24 @@ public class UsuarioApplicationService implements
     }
 
     /**
+     * Obtiene todos los usuarios
+     */
+    @Override
+    public List<Usuario> ejecutar() {
+        return usuarioRepository.obtenerTodos();
+    }
+
+    /**
      * Obtiene un usuario por su ID
      */
     public Usuario obtenerUsuarioPorId(Long id) {
         return usuarioRepository.obtenerPorId(id)
-            .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario con ID " + id + " no encontrado"));
+                .orElseThrow(() ->
+                        new UsuarioNoEncontradoException("Usuario con ID " + id + " no encontrado"));
     }
 
     /**
-     * Implementación del caso de uso: ObtenerUsuarioPorIdUseCase (interfaz)
-     * Nota: Este método tiene el mismo nombre que otro ejecutar(Long id),
-     * por eso implementamos con método privado.
+     * Implementación del caso de uso ObtenerUsuarioPorIdUseCase
      */
     @Override
     public Usuario ejecutar(Long id) {
@@ -67,7 +76,7 @@ public class UsuarioApplicationService implements
     }
 
     /**
-     * Actualiza los datos de un usuario existente
+     * Actualiza un usuario existente
      */
     public Usuario actualizarUsuario(Long id, String nombre, String email) {
         Usuario usuario = obtenerUsuarioPorId(id);
@@ -77,7 +86,7 @@ public class UsuarioApplicationService implements
     }
 
     /**
-     * Implementación del caso de uso: ActualizarUsuarioUseCase (interfaz)
+     * Implementación del caso de uso ActualizarUsuarioUseCase
      */
     @Override
     public Usuario ejecutar(Long id, String nombre, String email) {
@@ -85,14 +94,11 @@ public class UsuarioApplicationService implements
     }
 
     /**
-     * Obtener usuario por email
-     * @param email Email del usuario a buscar
-     * @return Usuario encontrado
-     * @throws UsuarioNoEncontradoException si el usuario no existe
+     * Obtiene un usuario por email
      */
     public Usuario obtenerPorEmail(String email) {
         return usuarioRepository.obtenerPorEmail(email)
-            .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario con email " + email + " no encontrado"));
+                .orElseThrow(() ->
+                        new UsuarioNoEncontradoException("Usuario con email " + email + " no encontrado"));
     }
 }
-

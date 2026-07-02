@@ -5,7 +5,10 @@ import com.biblio2.biblio2.domain.port.UsuarioRepositoryPort;
 import com.biblio2.biblio2.infrastructure.persistence.entity.UsuarioEntity;
 import com.biblio2.biblio2.infrastructure.persistence.repository.UsuarioJpaRepository;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Adaptador de Repositorio: Usuario
@@ -52,6 +55,17 @@ public class UsuarioRepositoryAdapter implements UsuarioRepositoryPort {
     }
 
     /**
+     * Obtiene todos los usuarios
+     */
+    @Override
+    public List<Usuario> obtenerTodos() {
+        return jpaRepository.findAll()
+                .stream()
+                .map(this::mapToDomain)
+                .collect(Collectors.toList());
+    }
+
+    /**
      * Actualiza un usuario existente
      */
     @Override
@@ -80,12 +94,15 @@ public class UsuarioRepositoryAdapter implements UsuarioRepositoryPort {
      */
     private UsuarioEntity mapToEntity(Usuario usuario) {
         UsuarioEntity entity = new UsuarioEntity();
+
         if (usuario.getId() != null) {
             entity.setId(usuario.getId());
         }
+
         entity.setNombre(usuario.getNombre());
         entity.setEmail(usuario.getEmail());
         entity.setPassword(usuario.getPassword());
+
         return entity;
     }
 
@@ -93,9 +110,14 @@ public class UsuarioRepositoryAdapter implements UsuarioRepositoryPort {
      * Mapea una entidad JPA a entidad de dominio
      */
     private Usuario mapToDomain(UsuarioEntity entity) {
-        Usuario usuario = new Usuario(entity.getNombre(), entity.getEmail(), entity.getPassword());
+        Usuario usuario = new Usuario(
+                entity.getNombre(),
+                entity.getEmail(),
+                entity.getPassword()
+        );
+
         usuario.setId(entity.getId());
+
         return usuario;
     }
 }
-

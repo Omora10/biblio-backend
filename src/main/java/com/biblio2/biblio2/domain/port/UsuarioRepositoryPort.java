@@ -1,6 +1,8 @@
 package com.biblio2.biblio2.domain.port;
 
 import com.biblio2.biblio2.domain.entity.Usuario;
+
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -25,6 +27,11 @@ public interface UsuarioRepositoryPort {
     Optional<Usuario> obtenerPorEmail(String email);
 
     /**
+     * Obtiene todos los usuarios
+     */
+    List<Usuario> obtenerTodos();
+
+    /**
      * Actualiza un usuario existente
      */
     Usuario actualizar(Usuario usuario);
@@ -39,4 +46,3 @@ public interface UsuarioRepositoryPort {
      */
     boolean existe(Long id);
 }
-
